@@ -45,7 +45,7 @@ When you're ready to submit your exam:
 ### Filter:
 
 ✅ 1. By popularity - clicking on popularity from the menu should change the url and show only posts with higher popularity (claps). Currently clicking on a dropdown item will redirect but no filtering will occur
-☀️ 2. By tag - Clicking on a tag from the tags list, or from a post's tags should change the url and show only posts with the selected tag. Currently clicking on them does nothing
+✅ 2. By tag - Clicking on a tag from the tags list, or from a post's tags should change the url and show only posts with the selected tag. Currently clicking on them does nothing
 ☀️ 3. Support filtering by both tag and popularity by url, for example `tag=frontend&popularity=20`. If a user clicks on a tag from the tags list, and then on popularity, both should be in the url
 ☀️ 4. Mark the selected tag and/or popularity option using the components' apis, selected tag color should be `primary`.
 

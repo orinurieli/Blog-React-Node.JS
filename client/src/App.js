@@ -191,6 +191,7 @@ function App() {
     setSelectedTagId('')
   }
 
+  // handleTagColorChange
   const handleFilterByTag = (postsByTag) =>{
     setFilteredPosts(postsByTag);
   }
