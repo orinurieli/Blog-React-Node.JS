@@ -17,7 +17,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle'
 import FilterAltIcon from '@mui/icons-material/FilterAlt'
 import HomeIcon from '@mui/icons-material/Home'
 import FloatingMenu from './components/FloatingMenu'
-import { useDebounce } from '@mui/utils';
+import debounce from 'lodash/debounce';
 
 
 function App() {
@@ -191,14 +191,18 @@ function App() {
     setSelectedTagId('')
   }
 
+  const handleFilterByTag = (postsByTag) =>{
+    setFilteredPosts(postsByTag);
+  }
+
   ///////////////////////////////////// filters /////////////////////////////////////
   const filterPostsByPopularity = (minClapsNum) => {
     setSelectedPopularityQuery(`${minClapsNum}`)
     getFilteredPosts(minClapsNum, selectedTagQuery)
   }
 
-  const handleFilterMyClaps = useDebounce(() => {
-  filterMyClaps();
+  const handleFilterMyClaps = debounce(() => {
+    filterMyClaps();
   }, 500);
   
   const filterMyClaps = () => {
@@ -235,7 +239,7 @@ function App() {
              <Button
               size='medium'
               startIcon={<FilterAltIcon />}
-              onClick={() => { handleFilterMyClaps()}}
+  onClick={handleFilterMyClaps}
               data-testid='myClapsBtn'
               color='secondary'
               className={
@@ -304,6 +308,7 @@ function App() {
                 userId={userId}
                 getTags={getTags}
                 getPosts={getPosts}
+                handleFilterByTag={handleFilterByTag}
               />
             }
           />

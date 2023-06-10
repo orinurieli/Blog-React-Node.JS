@@ -98,24 +98,41 @@ app.post('/post/claps', cors(corsOptions), (req, res) => {
   res.send({ Posts }).status(200).end()
 })
 
+// Endpoint for fetching posts by tag
 app.post('/posts/byTag', cors(corsOptions), (req, res) => {
-  const filteredPosts = []
   const { tagId, tagName } = req.body.tag
 
-  console.log({ tagId, tagName })
-
-  for (const [key, value] of Object.entries(Tags)) {
-    Posts.map((post) => {
-      if (Object.keys(Tags[key]).includes(post.id)) {
-        console.log('success')
-        filteredPosts.push(post)
-      }
-    })
+  console.log(`filter with tag: ${tagName}`)
+  const tagPosts = Tags[tagName]
+  if (!tagPosts) {
+    return [] // Return an empty array if the tag doesn't exist
   }
 
-  console.log(filteredPosts)
-  res.send({ filteredPosts }).status(200).end()
+  const postIds = Object.keys(tagPosts)
+  const filteredPosts = Posts.filter((post) => postIds.includes(post.id))
+
+  console.log({ filteredPosts })
+  res.json(filteredPosts)
 })
+
+// app.post('/posts/byTag', cors(corsOptions), (req, res) => {
+//   const filteredPosts = []
+//   const { tagId, tagName } = req.body.tag
+
+//   console.log({ tagId, tagName })
+
+//   for (const [key, value] of Object.entries(Tags)) {
+//     Posts.map((post) => {
+//       if (Object.keys(Tags[key]).includes(post.id)) {
+//         console.log('success')
+//         filteredPosts.push(post)
+//       }
+//     })
+//   }
+
+//   console.log(filteredPosts)
+//   res.send({ filteredPosts }).status(200).end()
+// })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

@@ -5,6 +5,8 @@ import Post from '../components/Post';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 
 const baseURL = 'http://localhost:3080';
@@ -19,13 +21,16 @@ function Home({
   selectedPopularityQuery,
   userId,
   getTags, 
-  getPosts
+  getPosts,
+  handleFilterByTag
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [option, setOption] = useState('TEST');
   const [anchorEl, setAnchorEl] = useState(null);
 
+const navigate = useNavigate();
+const location = useLocation();
   ///////////////////////////////////// handle query param /////////////////////////////////////
   searchParams.get('popularity');
 
@@ -71,8 +76,6 @@ axios.defaults.withCredentials = true;
 
   // clicking on tag itself
   const handleTagClick = (tagName, tagId) => {
-    // filter array of posts based on the tag
-
     axios
       .post(
         `${baseURL}/posts/byTag`,
@@ -86,20 +89,22 @@ axios.defaults.withCredentials = true;
         }
       )
       .then((response) => {
+        handleFilterByTag([...response.data])
       })
       .catch((error) => {
         console.log(error);
       });
-
-      getPosts();
+    
+    // getPosts();
   };
+
 
   ///////////////////////////////////// render components /////////////////////////////////////
   return (
     <div className='container'>
       <List sx={{ width: '650px' }}>
         {Posts.map((post) => (
-          <Post
+         <Post
             postId={post.id}
             postTitle={post.title}
             postContent={post.content}
@@ -111,7 +116,8 @@ axios.defaults.withCredentials = true;
             selectedTagId={selectedTagId}
             option={option}
             getPosts={getPosts}
-          />
+          >
+          </Post>
         ))}
       </List>
       <TagsCloud

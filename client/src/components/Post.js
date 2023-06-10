@@ -43,25 +43,25 @@ function Post({
   const MAX_CLAPS = 5;
 
   const [claps, setClaps] = useState(0);
+  const [showFullContent, setShowFullContent] = useState(false);
 
   const tagsNameArr = getTagsByPostId(postId);
   const isTag = tagsNameArr.length > 0 ? true : false;
   const didUserClappedOnPost = false;
 
   const handleClapChange = () => {
-    if(claps >= MAX_CLAPS)
-      return;
+    if (claps >= MAX_CLAPS) return;
     setClaps(claps + 1);
 
     axios
       .post(
         `${baseURL}/post/claps`,
-         {
+        {
           post: { postId: postId },
         },
         {
           headers: {
-            "content-type": "application/x-www-form-urlencoded",
+            'content-type': 'application/x-www-form-urlencoded',
           },
         }
       )
@@ -71,9 +71,13 @@ function Post({
       .catch((error) => {
         console.log(error);
       });
-    
-      getPosts();
-  }
+
+    getPosts();
+  };
+
+  const handleReadMoreClick = () => {
+    setShowFullContent(true);
+  };
 
   return (
     <ListItem
@@ -97,8 +101,11 @@ function Post({
               gutterBottom
               data-testid={`postContent-${postId}`}
             >
-              {postContent}
+              {showFullContent ? postContent : `${postContent.slice(0, 100)}...`}
             </Typography>
+            {(!showFullContent && postContent.length > 300) && (
+              <button onClick={handleReadMoreClick}>Read More</button>
+            )}
           </CardContent>
         </ListItemButton>
         <CardActions>
@@ -126,7 +133,10 @@ function Post({
               dataTestId={`postClappingIcon-${postId}`}
             />
           </IconButton>
-          <Typography variant='string' data-testid={`postClapsNum-${postId}`}>
+          <Typography
+            variant='string'
+            data-testid={`postClapsNum-${postId}`}
+          >
             {postClaps}
           </Typography>
         </CardActions>
