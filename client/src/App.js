@@ -191,7 +191,9 @@ function App() {
     setSelectedTagId('')
   }
 
-  // handleTagColorChange
+  const handleTagColorChange = (tagName) => {
+    setSelectedTagId(tagName)
+  }
   const handleFilterByTag = (postsByTag) =>{
     setFilteredPosts(postsByTag);
   }
@@ -310,6 +312,7 @@ function App() {
                 getTags={getTags}
                 getPosts={getPosts}
                 handleFilterByTag={handleFilterByTag}
+                handleTagColorChange={handleTagColorChange}
               />
             }
           />

@@ -22,7 +22,8 @@ function Home({
   userId,
   getTags, 
   getPosts,
-  handleFilterByTag
+  handleFilterByTag,
+  handleTagColorChange
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -76,6 +77,7 @@ axios.defaults.withCredentials = true;
 
   // clicking on tag itself
   const handleTagClick = (tagName, tagId) => {
+    handleTagColorChange(tagName);
     axios
       .post(
         `${baseURL}/posts/byTag`,
