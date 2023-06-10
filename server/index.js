@@ -111,7 +111,6 @@ app.post('/posts/byTag', cors(corsOptions), (req, res) => {
   const postIds = Object.keys(tagPosts)
   const filteredPosts = Posts.filter((post) => postIds.includes(post.id))
 
-  console.log({ filteredPosts })
   res.json(filteredPosts)
 })
 
