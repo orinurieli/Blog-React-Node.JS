@@ -88,7 +88,7 @@ function TagsCloud({
             <CardActions>
               <Button
                 variant='contained'
-                size='large'
+                size='medium'
                 onClick={handleSubmit}
                 data-testid='tagList-newTag-submitBtn'
               >

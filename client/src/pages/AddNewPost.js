@@ -119,7 +119,7 @@ function AddNewPost({ handleAddPost, Tags }) {
         <CardActions>
           <Button
             variant='contained'
-            size='large'
+            size='medium'
             data-testid='addNewPost-submitBtn'
             onClick={async ()=> {
               await handleAddPost(uuidv4(), title, content, selectedTag)

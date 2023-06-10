@@ -17,6 +17,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle'
 import FilterAltIcon from '@mui/icons-material/FilterAlt'
 import HomeIcon from '@mui/icons-material/Home'
 import FloatingMenu from './components/FloatingMenu'
+import { useDebounce } from '@mui/utils';
+
 
 function App() {
   const baseURL = 'http://localhost:3080'
@@ -40,6 +42,7 @@ function App() {
 
   const [alertMsg, setAlertMsg] = useState('')
   const [showAlert, setShowAlert] = useState(false)
+  const [showMyClaps, setShowMyClaps] = useState(true)
   const [alertType, setAlertType] = useState('')
 
   useEffect(() => {
@@ -76,7 +79,6 @@ function App() {
     axios
       .get(`${baseURL}/posts`)
       .then((response) => {
-        console.log(response)
         setAllPosts([...response.data['Posts']])
         setFilteredPosts([...response.data['Posts']])
       })
@@ -180,7 +182,7 @@ function App() {
 
   const handleMenuClose = (selectedOption) => {
     setAnchorEl(null)
-    filterPostsByPopularity(selectedOption) // 1
+    filterPostsByPopularity(selectedOption) 
   }
 
   const handleHomeClick = () => {
@@ -195,6 +197,20 @@ function App() {
     getFilteredPosts(minClapsNum, selectedTagQuery)
   }
 
+  const handleFilterMyClaps = useDebounce(() => {
+  filterMyClaps();
+  }, 500);
+  
+  const filterMyClaps = () => {
+    // toggle click for display claps
+    setShowMyClaps(!showMyClaps)
+    const showClaps = showMyClaps ? 0 : -1;
+    
+    // send request to filter according to Posts
+    // return only posts with claps > 0
+    filterPostsByPopularity(showClaps)     
+  }
+
   ///////////////////////////////////// render components /////////////////////////////////////
   const renderToolBar = () => {
     return (
@@ -203,7 +219,7 @@ function App() {
           <ButtonGroup variant='text' aria-label='text button group'>
             <Button
               href='/'
-              size='large'
+              size='medium'
               onClick={handleHomeClick}
               startIcon={<HomeIcon />}
             >
@@ -211,10 +227,24 @@ function App() {
             </Button>
             <Button
               href='/add-new-post'
-              size='large'
+              size='medium'
               startIcon={<AddCircleIcon />}
             >
               Add A New Post
+            </Button>
+             <Button
+              size='medium'
+              startIcon={<FilterAltIcon />}
+              onClick={() => { handleFilterMyClaps()}}
+              data-testid='myClapsBtn'
+              color='secondary'
+              className={
+                window.location.href !== 'http://localhost:3000/add-new-post'
+                  ? ''
+                  : 'visibilityHidden'
+              }
+            >
+              My Claps
             </Button>
           </ButtonGroup>
           <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
@@ -222,7 +252,7 @@ function App() {
           </Typography>
           <ButtonGroup variant='text' aria-label='text button group'>
             <Button
-              size='large'
+              size='medium'
               startIcon={<FilterAltIcon />}
               onClick={(e) => handlePopularityClick(e)}
               data-testid='popularityBtn'
